@@ -1,163 +1,140 @@
-
-/*
-    Data Structures - Internal Assessment 3
-    Question 2: Hash Table Implementation
-
-    Student PRN: 202501100060
-    Scenario: Mango Varieties
-    Seed (S): 60
-    Dataset: 20 personalized values
-    Hash Function: Division Method
-    Collision Strategy: Linear Probing
-    Table Size: 29
-
-    Features:
-    1. Division Method Hash Function
-    2. Linear Probing
-    3. Collision Counter
-    4. Duplicate Key Detection
-    5. Negative Key Validation
-    6. Insertion Summary and Statistics
-*/
-
+#include <algorithm>
+#include <array>
+#include <iomanip>
 #include <iostream>
 #include <vector>
-using namespace std;
 
-const int TABLE_SIZE = 29;
-
-int collisionCount = 0;
-int insertedCount = 0;
-
-int hashFunction(int key)
+namespace
 {
-    return key % TABLE_SIZE;
+constexpr int kTableSize = 29;
+constexpr std::array<int, 20> kDataset{
+    60, 73, 86, 99, 12, 25, 38, 51, 64, 77,
+    90, 3, 16, 29, 42, 55, 68, 81, 94, 7};
+
+int divisionHash(int key)
+{
+    return key % kTableSize;
 }
 
-void insertKey(vector<int>& table, int key)
+class HashTable
 {
-    if (key < 0)
+public:
+    HashTable() : slots_(kTableSize, -1) {}
+
+    bool insertKey(int key)
     {
-        cout << "\nInvalid key " << key
-             << ". Negative values are not allowed.";
-        return;
+        if (key < 0)
+        {
+            std::cout << "Invalid key " << key
+                      << ". Negative values are not allowed.\n";
+            return false;
+        }
+
+        if (std::find(slots_.begin(), slots_.end(), key) != slots_.end())
+        {
+            std::cout << "Duplicate key " << key << " ignored.\n";
+            return false;
+        }
+
+        int index = divisionHash(key);
+        std::cout << "Inserting " << key << " | Hash index = " << index;
+
+        for (int probes = 0; probes < kTableSize; ++probes)
+        {
+            if (slots_[index] == -1)
+            {
+                slots_[index] = key;
+                ++insertedCount_;
+                std::cout << " | Inserted at index " << index << '\n';
+                return true;
+            }
+
+            ++collisionCount_;
+            std::cout << " | Collision at index " << index;
+            index = (index + 1) % kTableSize;
+        }
+
+        std::cout << " | Hash table is full; " << key
+                  << " was not inserted.\n";
+        return false;
     }
 
-    // Check for duplicate keys
-    for (int i = 0; i < TABLE_SIZE; i++)
+    void displayInsertionStatistics(std::size_t totalInputValues) const
     {
-        if (table[i] == key)
+        const int occupiedPositions = insertedCount_;
+        const int emptyPositions = kTableSize - occupiedPositions;
+        const double loadFactor =
+            static_cast<double>(occupiedPositions) / kTableSize;
+
+        std::cout << "\n========== INSERTION SUMMARY ==========\n"
+                  << "Total input values: " << totalInputValues << '\n'
+                  << "Successfully inserted: " << insertedCount_ << '\n'
+                  << "Total collisions: " << collisionCount_ << '\n'
+                  << "Occupied positions: " << occupiedPositions << '\n'
+                  << "Empty positions: " << emptyPositions << '\n'
+                  << "Load factor: " << std::fixed << std::setprecision(4)
+                  << loadFactor << '\n';
+    }
+
+    void displayTable() const
+    {
+        std::cout << "\n========== FINAL HASH TABLE ==========\n"
+                  << "Index\tValue\n";
+
+        for (int index = 0; index < kTableSize; ++index)
         {
-            cout << "\nDuplicate key " << key << " ignored.";
-            return;
+            std::cout << index << '\t';
+            if (slots_[index] == -1)
+            {
+                std::cout << "Empty";
+            }
+            else
+            {
+                std::cout << slots_[index];
+            }
+            std::cout << '\n';
         }
     }
 
-    int index = hashFunction(key);
-    int originalIndex = index;
-
-    cout << "\nInserting " << key
-         << " | Hash index = " << index;
-
-    // Linear Probing
-    while (table[index] != -1)
-    {
-        collisionCount++;
-
-        cout << " | Collision at index " << index;
-
-        index = (index + 1) % TABLE_SIZE;
-
-        if (index == originalIndex)
-        {
-            cout << "\nHash table is full!";
-            return;
-        }
-    }
-
-    table[index] = key;
-    insertedCount++;
-
-    cout << " | Inserted at index " << index;
-}
-
-void displayTable(const vector<int>& table)
-{
-    cout << "\n\n========== FINAL HASH TABLE ==========\n";
-    cout << "Index\tValue\n";
-
-    for (int i = 0; i < TABLE_SIZE; i++)
-    {
-        cout << i << "\t";
-
-        if (table[i] == -1)
-            cout << "Empty";
-        else
-            cout << table[i];
-
-        cout << endl;
-    }
-}
-
-// Display insertion statistics
-void displayStatistics(const vector<int>& table)
-{
-    int occupiedCount = 0;
-
-    for (int i = 0; i < TABLE_SIZE; i++)
-    {
-        if (table[i] != -1)
-            occupiedCount++;
-    }
-
-    int emptyCount = TABLE_SIZE - occupiedCount;
-
-    cout << "\n\n========== INSERTION SUMMARY ==========\n";
-    cout << "Total dataset values: 20" << endl;
-    cout << "Successfully inserted: " << insertedCount << endl;
-    cout << "Total collisions: " << collisionCount << endl;
-    cout << "Occupied positions: " << occupiedCount << endl;
-    cout << "Empty positions: " << emptyCount << endl;
-}
+private:
+    std::vector<int> slots_;
+    int collisionCount_ = 0;
+    int insertedCount_ = 0;
+};
+} // namespace
 
 int main()
 {
-    int dataset[20] = {
-        60, 73, 86, 99, 12,
-        25, 38, 51, 64, 77,
-        90, 3, 16, 29, 42,
-        55, 68, 81, 94, 7
-    };
+    HashTable hashTable;
 
-    vector<int> hashTable(TABLE_SIZE, -1);
+    std::cout << "DATA STRUCTURES IA 3 - QUESTION 2\n"
+              << "Student: Prince Suresh Panchal\n"
+              << "PRN: 202501100060\n"
+              << "Scenario: Mango Varieties\n"
+              << "Personalization: v[i] = (60 + 13*i) % 100\n"
+              << "Hash Function: h(key) = key % " << kTableSize << '\n'
+              << "Collision Handling: Linear Probing\n"
+              << "Table Size: " << kTableSize << "\n\n"
+              << "Personalized Dataset:\n";
 
-    cout << "DATA STRUCTURES IA 3 - QUESTION 2\n";
-    cout << "PRN: 202501100060\n";
-    cout << "Scenario: Mango Varieties\n";
-    cout << "Hash Function: Division Method\n";
-    cout << "Collision Handling: Linear Probing\n";
-    cout << "Table Size: " << TABLE_SIZE << endl;
+    for (const int value : kDataset)
+    {
+        std::cout << value << ' ';
+    }
 
-    cout << "\nPersonalized Dataset:\n";
+    std::cout << "\n\n========== INSERTION PROCESS ==========\n";
+    for (const int value : kDataset)
+    {
+        hashTable.insertKey(value);
+    }
 
-    for (int i = 0; i < 20; i++)
-        cout << dataset[i] << " ";
+    std::cout << "\n========== DUPLICATE KEY TEST ==========\n";
+    hashTable.insertKey(60);
 
-    cout << "\n\n========== INSERTION PROCESS ==========\n";
+    std::cout << "\n========== INVALID KEY TEST ==========\n";
+    hashTable.insertKey(-10);
 
-    for (int i = 0; i < 20; i++)
-        insertKey(hashTable, dataset[i]);
-
-    // Duplicate-key test
-    cout << "\n\n========== DUPLICATE KEY TEST ==========\n";
-    insertKey(hashTable, 60);
-
-    // Negative-key test
-    cout << "\n\n========== INVALID KEY TEST ==========\n";
-    insertKey(hashTable, -10);
-
-    displayStatistics(hashTable);
-    displayTable(hashTable);
-
+    hashTable.displayInsertionStatistics(kDataset.size());
+    hashTable.displayTable();
     return 0;
 }

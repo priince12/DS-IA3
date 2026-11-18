@@ -1,104 +1,64 @@
+# Data Structures Internal Activity 3 – Question 2
 
+## Student details
 
-\# Data Structures IA-3 – Question 2
+- **Name:** Prince Suresh Panchal
+- **PRN:** 202501100060
+- **Subject:** Data Structures
+- **Project:** Build-in-the-Open Lab Project – Hash Table with Recorded Development Log
+- **Language:** C++
 
+## Project description
 
+This menu-free program inserts the personalized Mango Varieties dataset into a
+hash table. It uses the division method and linear probing, reports every
+collision during insertion, rejects duplicate and negative keys, and displays
+the final table and insertion statistics.
 
-\## Student Details
+## Personalization and configuration
 
-\- PRN: 202501100060
+- Last four PRN digits, `S`: 60
+- Scenario: Mango Varieties
+- Dataset formula: `v[i] = (S + 13*i) % 100`, for `i = 0..19`
+- Table size: 29, retained from the existing project (no assignment PDF was
+  present in the workspace)
+- Hash function: `h(key) = key % 29`
+- Collision resolution: Linear probing
 
-\- Name: Prince Suresh Panchal
+The dataset is:
 
-
-
-\## Project Title
-
-Hash Table Implementation using Linear Probing in C++
-
-
-
-\## Project Description
-
-This project implements a hash table in C++ using the division method for hashing and linear probing for collision resolution.
-
-
-
-\## Hash Function
-
-h(key) = key % 29
-
-
-
-\## Collision Resolution
-
-Linear Probing is used to find the next available position when a collision occurs.
-
-
-
-\## Personalized Dataset
-
-60, 73, 86, 99, 12, 25, 38, 51, 64, 77, 90, 3, 16, 29, 42, 55, 68, 81, 94, 7
-
-
-
-\## Hash Table Details
-
-\- Table Size: 29
-
-\- Total Input Values: 20
-
-\- Collision Resolution: Linear Probing
-
-
-
-\## Implemented Features
-
-1\. Hash table creation.
-
-2\. Division method hash function.
-
-3\. Linear probing for collision handling.
-
-4\. Collision counting.
-
-5\. Duplicate key detection.
-
-6\. Negative key validation.
-
-7\. Insertion summary and statistics.
-
-
-
-\## Programming Language
-
-C++
-
-
-
-\## How to Compile and Run
-
-Compile the program using a C++ compiler:
-
-
-
-```bash
-
-g++ IA3\_Q2.cpp -o IA3\_Q2
-
+```text
+60, 73, 86, 99, 12, 25, 38, 51, 64, 77,
+90, 3, 16, 29, 42, 55, 68, 81, 94, 7
 ```
 
+## Features
 
+- Inserts all 20 dataset values and shows each initial hash index, collision,
+  and final insertion position.
+- Counts each occupied slot encountered during probing as one collision.
+- Rejects a duplicate key and a negative key without changing the table.
+- Displays all 29 indexes, occupied values, and empty positions.
+- Reports the input and successful insertion counts, collisions, occupied and
+  empty positions, and load factor.
 
-Run the executable:
+## Compile and run
 
+From the project directory, compile with a C++17 compiler:
 
-
-```bash
-
-./IA3\_Q2
-
+```sh
+g++ -std=c++17 -Wall -Wextra -pedantic IA3_Q2.cpp -o IA3_Q2
 ```
 
+On Windows, run:
 
+```powershell
+.\IA3_Q2.exe
+```
 
+The program is deterministic and requires no interactive input.
+
+## Output image
+
+The captured output for the personalized dataset is available at
+[screenshots/program_output.png](screenshots/program_output.png).

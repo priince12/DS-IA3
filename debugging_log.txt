@@ -1,27 +1,9 @@
-# DATA STRUCTURES IA-3 – Q2
-## Debugging Log
+DATA STRUCTURES IA-3 – QUESTION 2
+Debugging log
+Student: Prince Suresh Panchal (PRN 202501100060)
 
-**Student Name:** Prince Suresh Panchal  
-**PRN:** 202501100060  
-**Project:** Hash Table Implementation using Linear Probing in C++
+Existing commit `e923d0a` — “Add files via upload”: The imported snapshot contained the original C++ hash table, dataset, executable, README, and text reports. I compiled and ran the original source with the requested warning flags; it inserted the 20 dataset values into the 29-slot table with 4 collisions and rejected the duplicate 60 and negative -10, but its statistics omitted the load factor. The existing `git_log.txt` was UTF-16 and described commits that do not exist in the actual one-commit Git history, so it was not used as evidence of development history.
 
-### Commit 1 – Initial Project Setup
-The initial C++ program was developed to implement a hash table using the division method with a table size of 29. The personalized dataset was inserted using linear probing for collision resolution. The hash function and insertion process were tested to check whether values were placed in the expected positions.
+Completion update — The source was clarified and made to report the load factor while retaining the confirmed table size and behavior; the README and trace report were rewritten from the requested student and dataset details. The updated source compiled with `g++ -std=c++17 -Wall -Wextra -pedantic`. An independent slot-by-slot comparison confirmed all 29 final positions, and output assertions confirmed 20 inputs and insertions, 4 collisions, 20 occupied positions, 9 empty positions, load factor 0.6897, and rejection of the duplicate and negative test keys. One initial verification-script attempt failed to parse the table because it did not account for Windows CRLF line endings; normalizing those line endings corrected the test, which then passed. This is a test-script issue, not a C++ failure. The original source and the updated source both compiled and ran successfully; no program-code failure was encountered.
 
-### Commit 2 – Add Collision Counter
-A collision counter was introduced to track the number of occupied positions encountered during linear probing. The counter was updated whenever an insertion encountered an occupied slot. The program was tested to verify that collisions were counted correctly.
-
-### Commit 3 – Add Duplicate Key Detection
-Duplicate key detection was added to prevent the same value from being inserted more than once. The program was tested by attempting to insert the value 60 again after the initial dataset had been inserted. The duplicate was rejected instead of being inserted again.
-
-### Commit 4 – Add Negative Key Validation
-Negative key validation was implemented to reject invalid negative inputs. During testing, the value -10 was supplied to the insertion function. The program correctly rejected the input and prevented it from entering the hash table.
-
-### Commit 5 – Add Insertion Summary and Statistics
-Insertion statistics were added to display the number of successfully inserted values, total collisions, occupied positions and empty positions. The output was checked against the expected results for the 20-value dataset and 29-slot table.
-
-### Commit 6 – Add Project Documentation
-A README.md file was created to document the project title, student details, hash function, collision resolution technique, personalized dataset and implemented features. The documentation was added to Git as the sixth development milestone.
-
-Additional Debugging Observation
-The C++ program was compiled and executed successfully using the VS Code terminal. The program output was checked to verify the hash table implementation, collision handling, duplicate key detection, negative key validation and insertion statistics. This helped confirm that the implemented features were working as expected.
+History export — After the completion commit, `git_log.txt` will be regenerated from the repository with `git log --stat --date=iso --pretty=fuller` and checked against the actual commit history. The export is a snapshot made after the project completion commit; as expected for a file containing its own repository's history, it cannot include the later commit that records that export itself.
